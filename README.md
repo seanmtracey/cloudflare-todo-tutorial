@@ -31,11 +31,11 @@ To follow this tutorial, you will need the following:
 
 To get started with this tutorial, first clone this repo. In your terminal, enter the following command:
 
-`git clone git@github.com:seanmtracey/cloudfare-todo.git`
+`git clone git@github.com:seanmtracey/cloudflare-todo-tutorial.git`
 
 This will make a copy of this repository on your local system that we can work on.
 
-Once the repo has been cloned, `cd` into the newly created project directory. This is where we'll be executing commands to deploy our application from the duration of this tutorial.
+Once the repo has been cloned, `cd` into the newly created project directory. This is where we'll be executing commands to deploy our application from for the duration of this tutorial.
 
 ### Installing the Wrangler CLI tool
 
@@ -45,11 +45,11 @@ Using the [npm CLI tool](https://www.npmjs.com/), we can install Wrangler with t
 
 `npm i -g wrangler`
 
-With the `-g` flag, we're going to install the Wrangler globally so we can use it for any of our Cloudflare Pages/Workers etc. projects.
+With the `-g` flag, we're going to install the Wrangler globally so we can use it for any of our Cloudflare Pages/Workers/etc. projects.
 
 ## Creating The Project
 
-The very first thing we're going to do to get this our to-do list  rolling is create a **project** for Cloudflare Pages.
+The very first thing we're going to do to get our to-do list rolling is create a **project** for Cloudflare Pages.
 
 Cloudflare Pages is designed for storing static assets that can be viewed on the web, but a **project** can also have [Cloudflare Workers](https://workers.cloudflare.com/) integrated into our application, enabling us to have dynamic routes which we can control with JavaScript.
 
@@ -63,7 +63,7 @@ In the above line of code, I've called my project `todo-tutorial`, but you can u
 
 ![A screengrab showing the output of Wrangler successfully creating a project](/doc_assets/image_1.png)
 
-You'll be asked to enter the production branch name. Cloudflare Pages has production and development environments for building applications on. Press your "return" key to select the `main` branch as your production branch, as this is the only branch we'll be using to deploy.
+You'll be asked to enter the production branch name. Cloudflare Pages has production and development environments for building applications on, but we're not going to cover that in this tutorial. Press your "return" key to select the `main` branch as your production branch, as this is the only branch we'll be using to deploy.
 
 After the project has been successfully created, a unique URL will be generated where we'll be able to access our application once we've deployed it. There's nothing deployed yet, so there'll be nothing to see there, but take note of this for later.
 
@@ -73,9 +73,9 @@ In order to have a useful to-do list, we need some way of persisting data across
 
 For this tutorial, we're going to use [Cloudflare KV](https://developers.cloudflare.com/workers/learning/how-kv-works/), a key-value data store.
 
-But what is a key-value data store? Well, databases come in many shapes and sizes. Some are structured like tables, others like documents. A key-value data store is a type of database which allows you to store a **value** against a given **key**. Each **key** in the datastore is unique, and the **value** can be updated and modified as we like. 
+But what is a key-value data store? Well, databases come in many shapes and sizes. Some are structured like tables, others like documents. A key-value data store is a type of database which allows you to store a **value** against a given **key**. Each **key** in the data store is unique, and the **value** can be updated and modified as we like. 
 
-Some examples of key-value datastores are Redis, DynamoDB or Azure Cosmos, but we're going to use Cloudflare KV.
+Some examples of key-value data stores are Redis, DynamoDB or Azure Cosmos, but we're going to use Cloudflare KV.
 
 Cloudflare KV is globally accessible and utilises Cloudflare's expansive global network to deliver data with incredibly low latency, so it's perfect for storing and retrieving a list of things we want to do for our to-do list.
 
@@ -91,7 +91,7 @@ Again, you can use any name you like, but take note of the underscores here, KV 
 
 ![A screengrab showing the output of Wrangler successfully creating a KV namespace](/doc_assets/image_2.png)
 
-Once the command has completed, you should see an output similar to the above. We're not using a `wrangler.toml` file in this project, so Wrangler has prepended our namespace with `worker-`. Take note of the entire namespace name.
+Once the command has completed, you should see an output similar to the above. We're not using a `wrangler.toml` file in this project, so Wrangler has prepended our namespace with `worker-`. Take note of the entire namespace name, you'll need it in the next step.
 
 ### Binding our KV namespace to our Project.
 
@@ -121,13 +121,13 @@ The view will change to show you a section where you'll be able to create a **Va
 
 ![A screengrab showing how to create a KV namespace binding](/doc_assets/image_7.png)
 
-This will create a global variable in any Cloudflare Worker that we deploy as part of our project that we'll be able to use to interact with our KV datastore. We'll be using Cloudflare workers later on to define endpoints that will make up the API our static application will interact with to create and persist our to-do list.
+This will create a global variable in any Cloudflare Worker that we deploy as part of our project that we'll be able to use to interact with our KV data store. We'll be using Cloudflare workers later on to define endpoints that will make up the API our static application will interact with to create and persist our to-do list.
 
 ### Trying It Out
 
 And that's it! We now have a Cloudflare KV data store that our project can read and write data to. So let's try it out!
 
-On the left-hand side of the Cloudflare Dashboard, click the dropdown icon next to "Workers" (highlighted below in green) and then click "KV" in the dropdown that appears (highlighted in blue). This will take us the KV section of the Cloudflare Dash where we'll be able to explore our KV datastores.
+On the left-hand side of the Cloudflare Dashboard, click the dropdown icon next to "Workers" (highlighted below in green) and then click "KV" in the dropdown that appears (highlighted in blue). This will take us the KV section of the Cloudflare Dash where we'll be able to explore our KV data stores.
 
 ![A screengrab showing where to access the Cloudflare KV section of the Cloudflare dash](/doc_assets/image_8.png)
 
@@ -151,7 +151,7 @@ Value:
 
 A big chunk of our to-do application is the static web page that's going to display our list, as well as let us create, update and delete items from said list.
 
-Now that we have our Pages project and KV datastore, we can take the first steps to getting our application on the web.
+Now that we have our Pages project and KV data store, we can take the first steps to getting our application on the web.
 
 Head back to your terminal and change directory to the `project` folder with the following command
 
@@ -163,7 +163,7 @@ Right now, the page doesn't do very much (except look pretty), but when we're do
 
 For now, we're just going to upload the assets as they are so we can get a live URL where we can see our changes on the web.
 
-There's also a `functions` directory which will defined the endpoints for our Workers-powered API that will interact with our KV namespace. Right now, they're just empty files, but they'll be uploaded all the same. We'll make this perform ✨magic✨ later on in this tutorial.
+There's also a `functions` directory which will define the endpoints for our Workers-powered API that will interact with our KV namespace. Right now, they're just empty files, but they'll be uploaded all the same. We'll make this perform ✨magic✨ later on in this tutorial.
 
 To deploy our static assets to our Pages Project, enter the following command in your terminal
 
@@ -175,7 +175,7 @@ The Wrangler tool will ask you whether or not you want to create a new project, 
 
 If all goes well, all of the assets in the `project` directory will be uploaded and deployed to Cloudflare Pages. If you like, you can copy the URL that Wrangler will have output at the end to see the page. 
 
-Note that the first section of the domain that the Wrangler has created for us will link to the version of our project we just deployed, not the base URL of the project. If you want to see the project at it's base URL(and thus, the latest version of the project that has been deployed) remove everything before the first period (`.`).
+Note that the first section of the domain that the Wrangler has created for us will link to the version of our project we just deployed, not the base URL of the project. If you want to see the project at its base URL(and thus, the latest version of the project that has been deployed) remove everything before the first period (`.`).
 
 ![An image showing what the static assets for our to-do list will look like](/doc_assets/image_11.png)
 
@@ -185,7 +185,7 @@ And that's it! We've deployed the static assets for our to-do list to Cloudflare
 
 When you were deploying your static assets to Cloudflare Pages, you may have noticed that the Wrangler also said something about "Compiling workers". Well, in our `project` directory, we have a `functions` directory too - and in there, we have some more folders, each with filenames like `[item].js` or `list.js`.
 
-Cloudflare Pages has a really cool feature, it's built to integrate with Workers, and if we have `functions` folder in the root directory of our  project, Wrangler will create a Worker for each `.js` file it finds in that directories.
+Cloudflare Pages has a really cool feature, it's built to integrate with Workers, and if we have a `functions` folder in the root directory of our project, Wrangler will create a Worker for each `.js` file it finds in that directory.
 
 But what is a Worker? A Worker is a piece of JavaScript code that can be deployed to handle HTTP requests when triggered on a given endpoint. It's a whole [serverless platform](https://en.wikipedia.org/wiki/Serverless_computing) that we can use to dynamically handle and respond to HTTP requests, all without having to worry about deploying and maintaining a server!
 
@@ -193,15 +193,15 @@ For every `.js` the Wrangler finds in our function directory, it will create a W
 
 So, if we have a `hello.js` file in the root of our `functions` folder, it can be triggered by hitting `https://<OUR_PAGES_URL>/hello`. If we have a `world.js` file in a subdirectory called `hello`, it can be triggered on `https://<OUR_PAGES_URL>/hello/world`. This opens up a whole world of possibilities when it comes to building fast, scalable web applications that can handle all manners of internet traffic.
 
-And the best part of this is, Workers integrate with KV! So, we can create a Worker that can handle HTTP requests and interact with our KV datastore on our behalf, and return it to the requesting client.
+And the best part of this is, Workers integrate with KV! So, we can create a Worker that can handle HTTP requests and interact with our KV data store on our behalf, and return it to the requesting client.
 
 And that's exactly what we're going to do now!
 
-### Listing Items in the KV Datastore
+### Listing Items in the KV Data Store
 
 The very first thing we're going to do with our Workers is create a `/list` endpoint that will list all of the keys currently stored in KV.
 
-Open up the `functions/api` directory in your favourite IDE, and open the `list.js` file for editing. 
+Open up the `/functions/api` directory in your favourite IDE, and open the `list.js` file for editing. 
 
 Right now, it's very empty and you'll only see the following:
 
@@ -213,7 +213,7 @@ export async function onRequest(context) {
 }
 ```
 
-This function uses the module syntax to expose a function `onRequest` which Cloudflare will execute when a request hits the `/list` endpoint. Cloudflare will pass through an object to the `context` parameter, which we can use to access certain properties and methods associated with the request. With the code the way it is, all that we'll get back now is a `500` error, as the function doesn't return a valid response. Let's change that.
+This function uses the module syntax to expose a function `onRequest` which Cloudflare will execute when a request hits the `/api/list` endpoint. Cloudflare will pass through an object to the `context` parameter, which we can use to access certain properties and methods associated with the request. With the code the way it is, all that we'll get back now is a `500` error, as the function doesn't return a valid response. Let's change that.
 
 After the line `// List the items in the KV data store` add the following code:
 
@@ -229,9 +229,9 @@ return new Response(body, {
 });
 ```
 
-On the first line, we're creating a variable `items` which will await the execution of the `context.env.TODO.list()` function. If you cast your mind back to when we created a binding for our KV namespace, we have the binding the variable name `TODO`. It's here through `context.env` that we can interact with the KV binding and call methods to interact with our datastore. In this case, we're asking KV to list all of the keys it currently has stored.
+On the first line, we're creating a variable `items` which will await the execution of the `context.env.TODO.list()` function. If you cast your mind back to when we created a binding for our KV namespace, we gave the binding the variable name `TODO`. It's here through `context.env` that we can interact with the KV binding and call methods to interact with our data store. In this case, we're asking KV to list all of the keys it currently has stored.
 
-Next, we create a variable `body` which will be a stringified version of the JSON object that `context.env.TODO.list()` will return containing all of the keys in our data store. We're going to send this object back to the requesting client as a response as a string, so we need to stringify the content *before* we return it.
+Next, we create a variable `body` which will be a stringified version of the JSON object that `context.env.TODO.list()` will return containing all of the keys in our data store. We're going to send this object back to the requesting client as a string, so we need to stringify the content *before* we return it.
 
 Finally, we return a new `Response` object (a global constructor available to our Worker) and pass it our `body` variable along with any headers we want to send with the response.
 
@@ -265,9 +265,11 @@ But before we do that, you may have noticed that the filename for our Worker is 
 
 This tells the Wrangler that the Worker generated for this file will handle a dynamic route - that is, a route which will allow us to match sections of a URL with parameterized segments.
 
-For example, we could trigger this Worker with both `/api/get/foo` and `/api/get/bar`, or any other value in that section in the URL. The value of this segment will then be available for us to respond to in the Worker when it's triggered, so we can change our response depending on the route that the Worker is being triggered on. 
+For example, we could trigger this Worker with both `/api/get/foo` and `/api/get/bar`, or any other value in that section in the URL. The value of this segment will then be available for us to manipulate in the Worker when it's triggered, so we can change our response depending on the route that the Worker is being triggered on. 
 
 In our case, we're going to have the last section of our URL be the key that we want to access from KV `/api/get/<KV_KEY>`.
+
+You can find out more about dynamic routing [here](https://developers.cloudflare.com/pages/platform/functions/routing/).
 
 #### Coding our /api/get Worker
 
@@ -288,7 +290,7 @@ We use `context.params.item` to access the value of the `<KV_KEY>` section of th
 
 Then, we once again return a `Response` object, passing in a stringified version of the JSON object we'll have retrieved from KV, and again pass through the headers that we want our response to have.
 
-Save the file and deploy the project once again using `wrangler pages publish ./`.
+Save the file and deploy the project using `wrangler pages publish ./`.
 
 This time, after your project has finished deploying, visit `https://<OUR_PAGES_URL>/api/get/unique_id`, with `unique_id` being the key of the entry that we added to our KV namespace a few steps back in your browser.
 
@@ -308,11 +310,11 @@ Next up, we want to be able to update items in our KV namespace so we can check 
 
 This function is going to be a little more complex than the two Workers that we've written already, but don't worry, it's still very simple.
 
-Open up `/functions/update/[item].js` in your favourite IDE for editing.
+Open up `/functions/api/update/[item].js` in your favourite IDE for editing.
 
 Just as in our `/api/get` Worker, we expect the requesting URL to pass through the key we want to update in our KV namespace, but this time we're expecting a body to be passed in the request with a JSON object detailing the changes to the key's value that we want to make.
 
-Copy and paste the following code after the `// Update an item in the KV data store` line in our `/functions/update/[item].js` file:
+Copy and paste the following code after the `// Update an item in the KV data store` line in our `/functions/api/update/[item].js` file:
 
 ```javascript
 const itemToUpdate = context.params.item;
@@ -358,7 +360,7 @@ return new Response(JSON.stringify({status : "ok"}), {
 
 First, we get the key that we want to update in our KV namespace from our requesting URL with `context.params.item` and assign it to the variable `itemToUpdate`.
 
-Next, we create a `data` variable which will contain the contents of the request's body using `context.request.json()`. Calling the `.json()` method on the `context.request` object will automatically parse a stringified JSON request body as JSON that we can interact with in our code.
+Next, we create a `data` variable which will contain the contents of the request's body using `context.request.json()`. Calling the `.json()` method on the `context.request` object will automatically parse a stringified JSON request body as JavaScript object that we can interact with in our code.
 
 After that, we check whether or not there's any data in the request body. If not, we respond to the client with a message telling them they've not passed any information to be updated for the given key.
 
@@ -368,7 +370,7 @@ If something goes wrong with the `put` operation, the `catch` statement will cre
 
 Otherwise, we simply repond with a JSON object telling our client that the item was successfully updated with `{status : "ok"}`.
 
-If you want to test your Worker, you can run the following cURL command, and then get the same key again in your browser.
+If you want to test your Worker, you can run the following cURL command, and then `GET` the same key again in your browser.
 
 ```sh
 curl --location --request POST 'https://<OUR_PAGES_URL>/api/update/unique_id' --header 'Content-Type: application/json' --data-raw '{"value":"Updated via curl!","status":"checked"}'
@@ -382,7 +384,7 @@ We're 3/4s of the way there with our API! 🥳
 
 The last thing we need to do is create a Worker which can delete a key from KV. We wouldn't want our to-do list getting clogged up with ancient items, now, would we?
 
-Open up `/functions/delete/[item].js` in your IDE and copy and paste the following code after the line `// Delete item from KV data store`
+Open up `/functions/api/delete/[item].js` in your IDE and copy and paste the following code after the line `// Delete item from KV data store`
 
 ```javascript
 if(context.request.method !== "DELETE"){
@@ -430,7 +432,7 @@ Now that we have our Workers-powered API all set up and deployed, we need to cod
 #### Listing all of the items in KV
 First up, we'll write the code that will list all of the items in our KV store and then render them in our application.
 
-Open up `project/scripts/main.js` and find the comment block that starts with `// CODE BLOCK 1` and copy and paste the following code just after it:
+Open up `/project/scripts/main.js` and find the comment block that starts with `// CODE BLOCK 1` and copy and paste the following code just after it:
 
 ```javascript
 
@@ -462,7 +464,7 @@ fetch('/api/list')
 
 This will make a fetch request to the `/api/list` route we've created that the Worker created with `/functions/api/list.js` will handle.
 
-Workers deployed as part of a pages project are hosted relative to the static elements that make up our application, so we don't need to include and origin in the request URL we pass to the fetch function.
+Workers deployed as part of a Pages project are hosted relative to the static elements that make up our application, so we don't need to include an origin in the request URL we pass to the fetch function.
 
 Next, we check that the response is valid, and then we parse it as JSON to be handled by the next `then()` block of code.
 
@@ -509,15 +511,15 @@ return Promise.all(data);
 
 ```
 
-This block of code will iterate over all of the keys that are returned by the `/api/list` request, and for each one will make a separate request to `/api/get/<KEY_ID>` to get the value of each respective key.
+This block of code will iterate over all of the keys that are returned by the `/api/list` request, and for each one will make a separate request to `/api/get/<KV_KEY>` to get the value of each respective key.
 
-These requests will hit the Worker created with the `/functions/get/[item].js` file, which will return the value for the key that's passed in place of `<KEY_ID>` in the `/api/get/<KEY_ID>` URL.
+These requests will hit the Worker created with the `/functions/get/[item].js` file, which will return the value for the key that's passed in place of `<KV_KEY>` in the `/api/get/<KV_KEY>` URL.
 
-You may notice that we check if the data returned by the `/api/get/<KEY_ID>` request is `null`. We do this because KV is **eventually consistent**, which, in short, means that the data we're returned may not be the *latest* version of that data. In the case of `null` being returned, a key was valid when it was included in the `/api/list` request, but has subsequently been deleted before we requested that keys value. You can find out more about KV and eventual consistency [here](https://developers.cloudflare.com/workers/learning/how-kv-works).
+You may notice that we check if the data returned by the `/api/get/<KV_KEY>` request is `null`. We do this because KV is **eventually consistent**, which, in short, means that the data we're returned may not be the *latest* version of that data. In the case of `null` being returned, a key was valid when it was included in the `/api/list` request, but has subsequently been deleted before we requested that keys value. You can find out more about KV and eventual consistency [here](https://developers.cloudflare.com/workers/learning/how-kv-works).
 
-If the data return from our request is not `null`, we return an object with the key, and the `value` and `status` properties stored in the JSON object against our given key. 
+If the data returned from our request is not `null`, we return an object with the key, and the `value` and `status` properties stored in the JSON object against our given key. 
 
-Finally, all of the results of the requests made to `/api/get/<KEY_ID>` are returned with `Promise.all(data)`, which will pass all of the responses to the next `.then()` in the promise chain as an array.
+Finally, all of the results of the requests made to `/api/get/<KV_KEY>` are returned with `Promise.all(data)`, which will pass all of the responses to the next `.then()` in the promise chain as an array.
 
 #### Rendering existing items in our application
 
@@ -537,7 +539,7 @@ list.querySelector('li:last-of-type').scrollIntoView();
 
 ```
 
-This code will filter out all of the `null` responses we may have receieved from our `/api/get/<KEY_ID>` requests, and then uses the existing functions in our application to render them to our list.
+This code will filter out all of the `null` responses we may have receieved from our `/api/get/<KV_KEY>` requests, and then uses the existing functions in our application to render them to our list.
 
 Save your `main.js` file and then publish the application again.
 
@@ -579,7 +581,7 @@ return fetch(`/api/update/${node.dataset.id}`, {
 
 This code again uses the fetch function to make a request to our API, but this time the method is `POST`, and the body is a stringified JSON object containing the text of the updated list item, and the status (whether or not it's been checked).
 
-The key for the item we want to update in KV is stored on the node for the list item as a data attribute (`data-id="<KEY_ID>"`), so we access that and use it to make up part of the request that goes the the Worker created by our `/functions/api/update/[item].js` file.
+The key for the item we want to update in KV is stored on the node for the list item as a data attribute (`data-id="<KV_KEY>"`), so we access that and use it to make up part of the request that goes to the Worker created by our `/functions/api/update/[item].js` file.
 
 Once the request has received a response, we check again that it's a valid response, and then call the pre-existing `evaluateList()` method which will update our UI to show how many items have been added to, and crossed off from our list.
 
@@ -618,7 +620,7 @@ Much like the code we used to update our list items, this code accesses a data a
 
 Our `/functions/api/delete/[item].js` file expects a HTTP request with the `DELETE` method, so we set that in the options for our fetch request.
 
-Once the request has been responded to by our worker, we check the response is valid, and if it is, we update our view to remove that item from our list and statistics.
+Once the request has been responded to by our Worker, we check the response is valid, and if it is, we update our view to remove that item from our list and statistics.
 
 And we're done! Publish your application one last time and you'll have a fully functional to-do list that you can add, update and delete items from. Happy crossing-off!
 
